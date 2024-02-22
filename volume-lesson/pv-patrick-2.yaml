@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: patrick-pv-vol
+  name: patrick-pv-vol-1
   labels:
-    type: local1
+    type: local2
 spec:
   storageClassName: manual
   capacity:
@@ -11,4 +11,4 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/home/docker/pv-data"  # For aws "home/ubuntu/pv-data"
+    path: "/home/docker/pv-dat2"  # For aws "home/ubuntu/pv-data"
