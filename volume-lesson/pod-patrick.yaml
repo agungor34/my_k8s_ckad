@@ -9,6 +9,9 @@ spec:
     - name: patrick-pv-storage
       persistentVolumeClaim:
         claimName: patrick-pv-claim
+    - name: patrick-pv-storclass
+      persistentVolumeClaim:
+        claimName: sc-pv-claim
   containers:
     - name: patrick-pv-container
       image: nginx
@@ -18,3 +21,5 @@ spec:
       volumeMounts:
         - mountPath: "/usr/share/nginx/html"
           name: patrick-pv-storage
+        - mountPath: "/mnt"
+          name: patrick-pv-storclass
