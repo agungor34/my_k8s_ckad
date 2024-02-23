@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: patrick-pod
+  labels:
+    app: patrick-web 
+spec:
+  volumes:
+    # - name: patrick-pv-storage
+    #   persistentVolumeClaim:
+    #     claimName: patrick-pv-claim
+    - name: patrick-pv-storclass
+      persistentVolumeClaim:
+        claimName: pvc-from-standart-sc
+  containers:
+    - name: patrick-pv-container
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        # - mountPath: "/usr/share/nginx/html"
+        #   name: patrick-pv-storage
+        - mountPath: "/usr/share/nginx/html"
+          name: patrick-pv-storclass

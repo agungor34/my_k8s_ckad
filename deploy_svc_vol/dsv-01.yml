@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-from-standart-sc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+  storageClassName: standard   # For aws: local-path
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-flask-deploy
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: web-flask
+  template:
+    metadata:
+      labels:
+        app: web-flask
+    spec:
+      containers:
+        - name: patrick-container
+          image: nginx
+          ports:
+            - containerPort: 80
+              name: "http-server"
+          volumeMounts:
+            - mountPath: "/usr/share/nginx/html"
+              name: patrick-volume
+      volumes:
+        - name: patrick-volume
+          persistentVolumeClaim:
+            claimName: pvc-from-standart-sc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-flask-svc
+  labels:
+    app: web-flask
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 10.103.229.75
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  selector:
+    app: web-flask
+  type: LoadBalancer
+  ports:
+  - port: 3000
+    targetPort: 80
+    nodePort: 32555
+#  clusterIP: 10.0.171.239
+  type: LoadBalancer
+  sessionAffinity: None
+status:
+  loadBalancer:
+    ingress:
+    - ip: 127.0.0.1
